@@ -2,26 +2,22 @@ defmodule FASTA do
   def parse(fasta_string) do
     str = String.strip(fasta_string)
 
-    if valid?(str) do
-      Regex.split(fasta_separator_regex, str)
-      |> Enum.map(&parse_datum/1)
-    else
-      []
-    end
-  end
-
-  defp valid?(fasta_string) do
-    String.starts_with?(fasta_string, ">") &&
-      fasta_string =~ ~r/\n/
+    Regex.split(fasta_separator_regex, str)
+    |> Enum.map(&parse_datum/1)
+    |> Enum.reject(&is_nil/1)
   end
 
   defp parse_datum(datum_string) do
-    [header_string, sequence_string] = Regex.split(~r/\n/, datum_string, parts: 2)
+    if datum_string =~ ~r/\n/ do
+      [header_string, sequence_string] = Regex.split(~r/\n/, datum_string, parts: 2)
 
-    header_str = clean_header(header_string)
-    sequence_str = clean_sequence(sequence_string)
+      header_str = clean_header(header_string)
+      sequence_str = clean_sequence(sequence_string)
 
-    %FASTA.Datum{header: header_str, sequence: sequence_str}
+      %FASTA.Datum{header: header_str, sequence: sequence_str}
+    else
+      nil
+    end
   end
 
   defp clean_header(raw_header) do

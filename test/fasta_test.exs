@@ -25,7 +25,8 @@ defmodule FASTATest do
   end
 
   test "parse returns an empty list of data from an invalid fasta string" do
-    raw_invalid_fasta = "> Oops, I'm from an invalid fasta file"
+    raw_invalid_fasta = "> Oops, I'm from an invalid fasta file
+                         > I have only headers"
     fasta_data = FASTA.parse(raw_invalid_fasta)
     assert(Enum.empty?(fasta_data))
   end
