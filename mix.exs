@@ -20,6 +20,6 @@ defmodule DNASearch.Mixfile do
   end
 
   defp description do
-    "DNASearch is a tool for looking up DNA sequences in Elixir."
+    "DNASearch is a tool for looking up DNA sequences by species in Elixir."
   end
 end
