@@ -12,11 +12,11 @@ defmodule DNASearch.Mixfile do
   end
 
   def application do
-    [applications: [:logger]]
+    [applications: [:logger, :httpotion]]
   end
 
   defp deps do
-    []
+    [{:httpotion, "~> 3.0.0"}]
   end
 
   defp description do
