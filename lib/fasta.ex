@@ -2,8 +2,17 @@ defmodule FASTA do
   def parse(fasta_string) do
     str = String.strip(fasta_string)
 
-    Regex.split(fasta_separator_regex, str)
-    |> Enum.map(&parse_datum/1)
+    if valid?(str) do
+      Regex.split(fasta_separator_regex, str)
+      |> Enum.map(&parse_datum/1)
+    else
+      []
+    end
+  end
+
+  defp valid?(fasta_string) do
+    String.starts_with?(fasta_string, ">") &&
+      fasta_string =~ ~r/\n/
   end
 
   defp parse_datum(datum_string) do
