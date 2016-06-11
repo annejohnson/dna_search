@@ -1,6 +1,8 @@
 defmodule FASTA do
   def parse(fasta_string) do
-    Regex.split(fasta_separator_regex, fasta_string)
+    str = String.strip(fasta_string)
+
+    Regex.split(fasta_separator_regex, str)
     |> Enum.map(&parse_datum/1)
   end
 
