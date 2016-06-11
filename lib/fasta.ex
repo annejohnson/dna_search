@@ -2,6 +2,9 @@ defmodule FASTA do
   def get_sequence(%{sequence: seq}), do: seq
   def get_sequence(_), do: nil
 
+  def get_header(%{header: header_str}), do: header_str
+  def get_header(_), do: nil
+
   def parse(fasta_string) do
     Regex.split(fasta_separator_regex, fasta_string)
     |> Enum.map(&parse_datum/1)

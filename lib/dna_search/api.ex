@@ -7,11 +7,18 @@ defmodule DNASearch.API do
   def get_fasta_data(query) when is_binary(query) do
     get_sequence_ids(query)
     |> get_fasta_data
+    |> filter_fasta_data(query)
   end
   def get_fasta_data(id_strings) when is_list(id_strings) do
     id_strings
     |> make_fasta_request
     |> FASTA.parse
+  end
+
+  def filter_fasta_data(fasta_data, query) do
+    Enum.filter(fasta_data, fn(datum) ->
+      FASTA.get_header(datum) =~ query
+    end)
   end
 
   def make_fasta_request(ids) do
