@@ -9,6 +9,6 @@ defmodule DNASearchTest do
     refute(Enum.empty?(results))
 
     first_result = hd(results)
-    assert(first_result["sequence"] =~ ~r/\A[ATGC]+\Z/)
+    assert(first_result =~ ~r/\A[ATGC]+\Z/)
   end
 end
