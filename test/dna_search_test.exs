@@ -2,7 +2,13 @@ defmodule DNASearchTest do
   use ExUnit.Case
   doctest DNASearch
 
-  test "the truth" do
-    assert 1 + 1 == 2
+  test "get_sequences_for_species" do
+    species = "Pionus maximiliani"
+    results = DNASearch.get_sequences_for_species(species)
+
+    refute(Enum.empty?(results))
+
+    first_result = hd(results)
+    assert(first_result["sequence"] =~ ~r/\A[ATGC]+\Z/)
   end
 end
