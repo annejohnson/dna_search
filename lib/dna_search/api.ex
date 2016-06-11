@@ -1,7 +1,7 @@
 defmodule DNASearch.API do
   def get_sequences(query) do
     get_fasta_data(query)
-    |> Enum.map(&FASTA.get_sequence/1)
+    |> Enum.map(fn(datum) -> datum.sequence end)
   end
 
   def get_fasta_data(query) when is_binary(query) do
@@ -17,7 +17,7 @@ defmodule DNASearch.API do
 
   def filter_fasta_data(fasta_data, query) do
     Enum.filter(fasta_data, fn(datum) ->
-      FASTA.get_header(datum) =~ query
+      datum.header =~ query
     end)
   end
 

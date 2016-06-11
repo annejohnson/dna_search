@@ -1,10 +1,4 @@
 defmodule FASTA do
-  def get_sequence(%{sequence: seq}), do: seq
-  def get_sequence(_), do: nil
-
-  def get_header(%{header: header_str}), do: header_str
-  def get_header(_), do: nil
-
   def parse(fasta_string) do
     Regex.split(fasta_separator_regex, fasta_string)
     |> Enum.map(&parse_datum/1)
@@ -12,17 +6,11 @@ defmodule FASTA do
 
   def parse_datum(datum_string) do
     [header_string, sequence_string] = Regex.split(~r/\n/, datum_string, parts: 2)
-    header_data = parse_header(header_string)
-    sequence_data = parse_sequence(sequence_string)
-    Map.merge(header_data, sequence_data)
-  end
 
-  def parse_header(raw_header) do
-    %{header: clean_header(raw_header)}
-  end
+    header_str = clean_header(header_string)
+    sequence_str = clean_sequence(sequence_string)
 
-  def parse_sequence(raw_sequence) do
-    %{sequence: clean_sequence(raw_sequence)}
+    %FASTA.Datum{header: header_str, sequence: sequence_str}
   end
 
   def clean_header(raw_header) do
