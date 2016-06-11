@@ -1,12 +1,17 @@
 defmodule DNASearch.API do
   def get_sequences(query) do
-    get_sequence_ids(query)
-    |> get_fasta_data
+    get_fasta_data(query)
     |> Enum.map(&FASTA.get_sequence/1)
   end
 
-  def get_fasta_data(ids) do
-    FASTA.parse(make_fasta_request(ids))
+  def get_fasta_data(query) when is_binary(query) do
+    get_sequence_ids(query)
+    |> get_fasta_data
+  end
+  def get_fasta_data(id_strings) when is_list(id_strings) do
+    id_strings
+    |> make_fasta_request
+    |> FASTA.parse
   end
 
   def make_fasta_request(ids) do
