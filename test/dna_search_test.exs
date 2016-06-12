@@ -2,13 +2,41 @@ defmodule DNASearchTest do
   use ExUnit.Case
   doctest DNASearch
 
-  test "get_sequences_for_species" do
-    species = "Pionus maximiliani"
-    results = DNASearch.get_sequences_for_species(species)
+  test "get_sequences" do
+    organism = "Pionus maximiliani"
+    results = DNASearch.get_sequences(organism)
 
-    refute(Enum.empty?(results))
+    assert(
+      results
+      |> Enum.map(&valid_sequence?/1)
+      |> Enum.all?
+    )
+  end
 
-    first_result = hd(results)
-    assert(first_result =~ ~r/\A[ATGC]+\Z/)
+  test "get_fasta_data" do
+    organism = "water buffalo"
+    results = DNASearch.get_fasta_data(organism)
+
+    assert(
+      results
+      |> Enum.map(fn(result) -> result.sequence end)
+      |> Enum.map(&valid_sequence?/1)
+      |> Enum.all?
+    )
+
+    assert(
+      results
+      |> Enum.map(fn(result) -> result.header end)
+      |> Enum.map(&is_binary/1)
+      |> Enum.all?
+    )
+  end
+
+  defp valid_sequence?(str) do
+    str =~ ~r/\A[#{nucleotide_codes}\-]+\Z/i
+  end
+
+  defp nucleotide_codes do
+    "ACGTURYKMSWBDHVN"
   end
 end

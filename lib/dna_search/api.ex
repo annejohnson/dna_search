@@ -3,18 +3,21 @@ defmodule DNASearch.API do
   # Fields info: http://www.ncbi.nlm.nih.gov/books/NBK49540/
   # Syntax info: https://www.ncbi.nlm.nih.gov/books/NBK25499/
 
-  def get_sequences(query) do
-    get_fasta_data(query)
+  def get_sequences(organism_name) do
+    organism_name
+    |> get_fasta_data
     |> Enum.map(fn(datum) -> datum.sequence end)
   end
 
-  def get_fasta_data(query) do
-    get_sequence_ids(query)
+  def get_fasta_data(organism_name) do
+    organism_name
+    |> get_sequence_ids
     |> get_fasta_data_for_sequence_ids
   end
 
-  def get_sequence_ids(query) do
-    make_search_request(query)
+  defp get_sequence_ids(organism_name) do
+    organism_name
+    |> make_search_request
     |> Floki.find("idlist id")
     |> Enum.map(&Floki.FlatText.get/1)
   end
