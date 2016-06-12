@@ -12,7 +12,7 @@ defmodule DNASearch.API do
   def get_fasta_data(id_strings) when is_list(id_strings) do
     id_strings
     |> make_fasta_request
-    |> FASTA.parse
+    |> FASTA.Parser.parse
   end
 
   def filter_fasta_data(fasta_data, query) do
