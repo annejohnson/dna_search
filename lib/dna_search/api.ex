@@ -7,7 +7,6 @@ defmodule DNASearch.API do
   def get_fasta_data(query) do
     get_sequence_ids(query)
     |> get_fasta_data_for_sequence_ids
-    |> filter_fasta_data(query)
   end
 
   def get_sequence_ids(query) do
@@ -20,12 +19,6 @@ defmodule DNASearch.API do
     id_strings
     |> make_fasta_request
     |> FASTA.Parser.parse
-  end
-
-  defp filter_fasta_data(fasta_data, query) do
-    Enum.filter(fasta_data, fn(datum) ->
-      datum.header =~ query
-    end)
   end
 
   defp make_search_request(query) do
@@ -42,7 +35,7 @@ defmodule DNASearch.API do
   end
 
   defp search_params(query) do
-    Map.merge(shared_params, %{term: query})
+    Map.merge(shared_params, %{term: "#{query}[primary organism]"})
   end
 
   defp fasta_params(sequence_ids) do
