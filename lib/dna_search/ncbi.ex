@@ -3,15 +3,22 @@ defmodule DNASearch.NCBI do
   # Fields info: http://www.ncbi.nlm.nih.gov/books/NBK49540/
   # Syntax info: https://www.ncbi.nlm.nih.gov/books/NBK25499/
 
-  def get_fasta(organism_name) do
+  @doc """
+
+  ## Parameters
+
+    - `options`:
+        `num_results`: default 20
+  """
+  def get_fasta(organism_name, options \\ []) do
     organism_name
-    |> get_sequence_ids
+    |> get_sequence_ids(options)
     |> get_fasta_for_sequence_ids
   end
 
-  def get_sequence_ids(organism_name) do
+  def get_sequence_ids(organism_name, options \\ []) do
     organism_name
-    |> make_search_request
+    |> make_search_request(options)
     |> Floki.find("idlist id")
     |> Enum.map(&Floki.FlatText.get/1)
   end
@@ -21,18 +28,18 @@ defmodule DNASearch.NCBI do
     |> make_fasta_request
   end
 
-  defp make_search_request(query) do
-    make_get_request(search_url, search_params(query))
+  defp make_search_request(query, options) do
+    make_get_request(search_url, search_params(query, options))
   end
 
   defp make_fasta_request(sequence_ids) do
     make_get_request(fetch_url, fasta_params(sequence_ids))
   end
 
-  defp search_params(query) do
+  defp search_params(query, options) do
     %{
       term: "#{query}[primary organism] AND biomol_genomic[prop]",
-      retmax: max_records_per_request
+      retmax: options |> Keyword.get(:num_results, default_num_results)
     }
     |> Map.merge(shared_params)
   end
@@ -51,7 +58,7 @@ defmodule DNASearch.NCBI do
     HTTPotion.get(url, timeout: timeout_in_milliseconds).body
   end
 
-  defp max_records_per_request do
+  defp default_num_results do
     20
   end
 
