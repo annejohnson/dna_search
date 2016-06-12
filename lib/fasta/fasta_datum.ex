@@ -1,3 +1,3 @@
 defmodule FASTA.Datum do
-  defstruct header: "", sequence: ""
+  defstruct [:header, :sequence]
 end
