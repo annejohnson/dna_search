@@ -1,4 +1,6 @@
 defmodule DNASearch.API do
+  # API info: https://www.ncbi.nlm.nih.gov/books/NBK25500/
+
   def get_sequences(query) do
     get_fasta_data(query)
     |> Enum.map(fn(datum) -> datum.sequence end)
@@ -35,12 +37,17 @@ defmodule DNASearch.API do
   end
 
   defp search_params(query) do
-    Map.merge(shared_params, %{term: "#{query}[primary organism]"})
+    %{term: "#{query}[primary organism]", retmax: max_records_per_request}
+    |> Map.merge(shared_params)
   end
 
   defp fasta_params(sequence_ids) do
     %{rettype: "fasta", retmode: "text", id: Enum.join(sequence_ids, ",")}
     |> Map.merge(shared_params)
+  end
+
+  defp max_records_per_request do
+    100
   end
 
   defp shared_params do
