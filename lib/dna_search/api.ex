@@ -1,5 +1,6 @@
 defmodule DNASearch.API do
   # API info: https://www.ncbi.nlm.nih.gov/books/NBK25500/
+  # Fields info: http://www.ncbi.nlm.nih.gov/books/NBK49540/
 
   def get_sequences(query) do
     get_fasta_data(query)
@@ -37,7 +38,10 @@ defmodule DNASearch.API do
   end
 
   defp search_params(query) do
-    %{term: "#{query}[primary organism]", retmax: max_records_per_request}
+    %{
+      term: "#{query}[primary organism] AND biomol_genomic[prop]",
+      retmax: max_records_per_request
+    }
     |> Map.merge(shared_params)
   end
 
