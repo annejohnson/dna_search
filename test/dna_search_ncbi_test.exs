@@ -16,6 +16,21 @@ defmodule DNASearchNCBITest do
     assert(length(FASTA.parse_string(large_result)) == 40)
   end
 
+  test "get_fasta accepts a :properties option" do
+    genomic_dna_result = DNASearch.NCBI.get_fasta(
+      "Homo sapiens",
+      num_results: 1,
+      properties: "biomol_genomic"
+    )
+    mitochondrial_dna_result = DNASearch.NCBI.get_fasta(
+      "Homo sapiens",
+      num_results: 1,
+      properties: "gene_in_mitochondrion"
+    )
+
+    refute(genomic_dna_result == mitochondrial_dna_result)
+  end
+
   test "get_sequence_ids returns a list of id strings" do
     results = DNASearch.NCBI.get_sequence_ids("Angraecum eburneum")
 
