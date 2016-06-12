@@ -1,6 +1,7 @@
 defmodule DNASearch.API do
   # API info: https://www.ncbi.nlm.nih.gov/books/NBK25500/
   # Fields info: http://www.ncbi.nlm.nih.gov/books/NBK49540/
+  # Syntax info: https://www.ncbi.nlm.nih.gov/books/NBK25499/
 
   def get_sequences(query) do
     get_fasta_data(query)
