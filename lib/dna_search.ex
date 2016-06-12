@@ -10,6 +10,6 @@ defmodule DNASearch do
   def get_fasta_data(organism_name) do
     organism_name
     |> API.get_fasta
-    |> FASTA.Parser.parse
+    |> FASTA.parse_string
   end
 end

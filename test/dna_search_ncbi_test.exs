@@ -5,9 +5,7 @@ defmodule DNASearchNCBITest do
   test "get_fasta" do
     result = DNASearch.NCBI.get_fasta("water buffalo")
 
-    assert(
-      DNASearchTestHelper.valid_fasta_string?(result)
-    )
+    assert(FASTA.valid_string?(result))
   end
 
   test "get_sequence_ids" do
@@ -23,8 +21,6 @@ defmodule DNASearchNCBITest do
   test "get_fasta_for_sequence_ids" do
     result = DNASearch.NCBI.get_fasta_for_sequence_ids(["1027888907"])
 
-    assert(
-      DNASearchTestHelper.valid_fasta_string?(result)
-    )
+    assert(FASTA.valid_string?(result))
   end
 end
