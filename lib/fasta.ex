@@ -3,8 +3,8 @@ defmodule FASTA do
     str = String.strip(fasta_string)
 
     Regex.split(fasta_separator_regex, str)
-    |> Enum.map(&parse_datum/1)
-    |> Enum.reject(&is_nil/1)
+    |> Parallel.map(&parse_datum/1)
+    |> Parallel.reject(&is_nil/1)
   end
 
   defp parse_datum(datum_string) do
