@@ -10,6 +10,7 @@ defmodule DNASearch.NCBI do
     - `options`:
         `num_results`: default `20`
         `properties`: default `biomol_genomic` ([see more possible values here](http://www.ncbi.nlm.nih.gov/books/NBK49540/))
+        `timeout`: default `10_000` (10 seconds)
   """
   def get_fasta(organism_name, options \\ []) do
     organism_name
@@ -24,17 +25,17 @@ defmodule DNASearch.NCBI do
     |> Enum.map(&Floki.FlatText.get/1)
   end
 
-  def get_fasta_for_sequence_ids(id_strings) do
+  def get_fasta_for_sequence_ids(id_strings, options \\ []) do
     id_strings
-    |> make_fasta_request
+    |> make_fasta_request(options)
   end
 
   defp make_search_request(organism_name, options) do
-    make_get_request(search_url, search_params(organism_name, options))
+    make_get_request(search_url, search_params(organism_name, options), options)
   end
 
-  defp make_fasta_request(sequence_ids) do
-    make_get_request(fetch_url, fasta_params(sequence_ids))
+  defp make_fasta_request(sequence_ids, options) do
+    make_get_request(fetch_url, fasta_params(sequence_ids), options)
   end
 
   defp search_params(organism_name, options) do
@@ -57,9 +58,10 @@ defmodule DNASearch.NCBI do
     %{db: "nucleotide"}
   end
 
-  defp make_get_request(url_endpoint, params) do
+  defp make_get_request(url_endpoint, params, options) do
     url = url_endpoint <> "?" <> URI.encode_query(params)
-    HTTPotion.get(url, timeout: timeout_in_milliseconds).body
+    timeout = options |> Keyword.get(:timeout, default_timeout)
+    HTTPotion.get(url, timeout: timeout).body
   end
 
   defp default_num_results do
@@ -70,7 +72,7 @@ defmodule DNASearch.NCBI do
     "biomol_genomic"
   end
 
-  defp timeout_in_milliseconds do
+  defp default_timeout do
     10_000
   end
 

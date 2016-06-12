@@ -17,7 +17,6 @@ end
 ## TODO
 
 - Make NCBI module behavior more configurable
-  - timeout
   - retstart
   - paging
 - Gracefully handle HTTPotion errors
