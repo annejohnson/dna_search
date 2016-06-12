@@ -8,7 +8,7 @@ defmodule DNASearchTest do
 
     assert(
       results
-      |> Enum.map(&valid_sequence?/1)
+      |> Enum.map(&DNASearchTestHelper.valid_sequence?/1)
       |> Enum.all?
     )
   end
@@ -20,7 +20,7 @@ defmodule DNASearchTest do
     assert(
       results
       |> Enum.map(fn(result) -> result.sequence end)
-      |> Enum.map(&valid_sequence?/1)
+      |> Enum.map(&DNASearchTestHelper.valid_sequence?/1)
       |> Enum.all?
     )
 
@@ -30,13 +30,5 @@ defmodule DNASearchTest do
       |> Enum.map(&is_binary/1)
       |> Enum.all?
     )
-  end
-
-  defp valid_sequence?(str) do
-    str =~ ~r/\A[#{nucleotide_codes}\-]+\Z/i
-  end
-
-  defp nucleotide_codes do
-    "ACGTURYKMSWBDHVN"
   end
 end
