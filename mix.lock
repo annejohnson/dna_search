@@ -1,4 +1,4 @@
-%{"fasta": {:hex, :fasta, "0.0.1", "1a98e49c0d550eae8f90bc9b6339a7e123d1ee0585f6991762db2879c3957991", [:mix], [{:parallel, "~> 0.0.3", [hex: :parallel, optional: false]}]},
+%{"fasta": {:hex, :fasta, "0.1.0", "fa14a69396b0a7ac552b27ea864c6115e0dbe9d5ecfdaf36cbb4bf788b750a56", [:mix], [{:parallel, "~> 0.0.3", [hex: :parallel, optional: false]}]},
   "floki": {:hex, :floki, "0.8.1", "06aa75bf2d1e01cda7d2ad54f68614be653a11e76b474d8fcb1d838f8c1e0ad1", [:mix], [{:mochiweb_html, "~> 2.15", [hex: :mochiweb_html, optional: false]}]},
   "httpotion": {:hex, :httpotion, "3.0.0", "4ce0af28f4254bdd0457d0fe065a83787751e0a5b5f5d27030948253be38df5c", [:mix], [{:ibrowse, "~> 4.2", [hex: :ibrowse, optional: false]}]},
   "ibrowse": {:hex, :ibrowse, "4.2.2", "b32b5bafcc77b7277eff030ed32e1acc3f610c64e9f6aea19822abcadf681b4b", [:rebar3], []},
