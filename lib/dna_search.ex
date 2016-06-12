@@ -1,6 +1,15 @@
 defmodule DNASearch do
-  defdelegate [
-    get_sequences(organism_name),
-    get_fasta_data(organism_name)
-  ], to: DNASearch.API
+  alias DNASearch.NCBI, as: API
+
+  def get_sequences(organism_name) do
+    organism_name
+    |> get_fasta_data
+    |> Enum.map(fn(datum) -> datum.sequence end)
+  end
+
+  def get_fasta_data(organism_name) do
+    organism_name
+    |> API.get_fasta
+    |> FASTA.Parser.parse
+  end
 end
