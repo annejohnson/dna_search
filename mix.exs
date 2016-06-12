@@ -18,7 +18,7 @@ defmodule DNASearch.Mixfile do
   defp deps do
     [{:httpotion, "~> 3.0.0"},
      {:floki, "~> 0.8.1"},
-     {:parallel, "~> 0.0.3"}]
+     {:fasta, "~> 0.0.1"}]
   end
 
   defp description do
