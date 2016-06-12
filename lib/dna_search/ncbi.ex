@@ -52,7 +52,7 @@ defmodule DNASearch.NCBI do
   end
 
   defp max_records_per_request do
-    100
+    20
   end
 
   defp timeout_in_milliseconds do

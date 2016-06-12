@@ -13,3 +13,13 @@ def deps do
   [{:dna_search, "~> 0.0.1"}]
 end
 ```
+
+## TODO
+
+- Make NCBI module behavior more configurable
+  - retmax
+  - prop
+  - timeout
+  - retstart
+  - paging
+- Gracefully handle HTTPotion errors
