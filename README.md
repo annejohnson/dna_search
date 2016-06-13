@@ -17,5 +17,4 @@ end
 ## Next Steps
 
 - Make NCBI module behavior more configurable
-  - retstart
   - paging
