@@ -38,6 +38,36 @@ defmodule DNASearchNCBITest do
     refute(genomic_dna_result == mitochondrial_dna_result)
   end
 
+  test "get_sequence_records returns data including a list of id strings" do
+    %{ids: ids} = DNASearch.NCBI.get_sequence_records("Orchidaceae")
+
+    assert(
+      Enum.all?(ids, fn(id) -> id =~ ~r/\d+/ end)
+    )
+  end
+
+  test "get_sequence_records returns data including the number of returned records" do
+    %{num_records: num_records} = DNASearch.NCBI.get_sequence_records("Orchidaceae", num_records: 5)
+
+    assert(num_records == 5)
+  end
+
+  test "get_sequence_records returns data including the total number of available records" do
+    %{total_num_records: total_num_records} = DNASearch.NCBI.get_sequence_records("Orchidaceae")
+
+    assert(is_integer(total_num_records))
+    assert(total_num_records > 0)
+  end
+
+  test "get_sequence_records returns data including the index of the first returned record" do
+    %{start_at_record_index: start_at_record_index} = DNASearch.NCBI.get_sequence_records(
+      "Orchidaceae",
+      start_at_record_index: 20
+    )
+
+    assert(start_at_record_index == 20)
+  end
+
   test "get_sequence_ids returns a list of id strings" do
     results = DNASearch.NCBI.get_sequence_ids("Angraecum eburneum")
 

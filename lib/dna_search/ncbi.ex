@@ -19,11 +19,20 @@ defmodule DNASearch.NCBI do
     |> get_fasta_for_sequence_ids
   end
 
+  def get_sequence_records(organism_name, options \\ []) do
+    response_string = organism_name |> make_search_request(options)
+    ids = extract_id_strings(response_string)
+
+    %{
+      ids: ids,
+      start_at_record_index: extract_start_at_record_index(response_string),
+      num_records: length(ids),
+      total_num_records: extract_total_num_records(response_string)
+    }
+  end
+
   def get_sequence_ids(organism_name, options \\ []) do
-    organism_name
-    |> make_search_request(options)
-    |> Floki.find("idlist id")
-    |> Enum.map(&Floki.FlatText.get/1)
+    get_sequence_records(organism_name, options).ids
   end
 
   def get_fasta_for_sequence_ids(id_strings, options \\ []) do
@@ -37,6 +46,29 @@ defmodule DNASearch.NCBI do
 
   defp make_search_request(organism_name, options) do
     make_get_request(search_url, search_params(organism_name, options), options)
+  end
+
+  defp extract_id_strings(response_string) do
+    response_string
+    |> Floki.find("idlist id")
+    |> Enum.map(&Floki.FlatText.get/1)
+  end
+
+  defp extract_start_at_record_index(response_string) do
+    response_string
+    |> Floki.find("retstart")
+    |> Floki.FlatText.get
+    |> Integer.parse
+    |> elem(0)
+  end
+
+  defp extract_total_num_records(response_string) do
+    response_string
+    |> Floki.filter_out("translationstack")
+    |> Floki.find("count")
+    |> Floki.FlatText.get
+    |> Integer.parse
+    |> elem(0)
   end
 
   defp make_fasta_request(sequence_ids, options) do

@@ -13,8 +13,3 @@ def deps do
   [{:dna_search, "~> 0.0.1"}]
 end
 ```
-
-## Next Steps
-
-- Make NCBI module behavior more configurable
-  - paging
