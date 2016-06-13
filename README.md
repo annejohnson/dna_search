@@ -14,9 +14,8 @@ def deps do
 end
 ```
 
-## TODO
+## Next Steps
 
 - Make NCBI module behavior more configurable
   - retstart
   - paging
-- Gracefully handle HTTPotion errors

@@ -26,8 +26,12 @@ defmodule DNASearch.NCBI do
   end
 
   def get_fasta_for_sequence_ids(id_strings, options \\ []) do
-    id_strings
-    |> make_fasta_request(options)
+    if Enum.any?(id_strings) do
+      id_strings
+      |> make_fasta_request(options)
+    else
+      ""
+    end
   end
 
   defp make_search_request(organism_name, options) do
@@ -61,7 +65,14 @@ defmodule DNASearch.NCBI do
   defp make_get_request(url_endpoint, params, options) do
     url = url_endpoint <> "?" <> URI.encode_query(params)
     timeout = options |> Keyword.get(:timeout, default_timeout)
-    HTTPotion.get(url, timeout: timeout).body
+    response = HTTPotion.get(url, timeout: timeout)
+
+    case response do
+      %{body: response_body} ->
+        response_body
+      _ ->
+        ""
+    end
   end
 
   defp default_num_results do
