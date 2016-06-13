@@ -9,6 +9,7 @@ defmodule DNASearch.NCBI do
 
     - `options`:
         `num_results`: default `20`
+        `start_at_record_index`: default `0` to start at the first record
         `properties`: default `biomol_genomic` ([see more possible values here](http://www.ncbi.nlm.nih.gov/books/NBK49540/))
         `timeout`: default `10_000` (10 seconds)
   """
@@ -44,11 +45,13 @@ defmodule DNASearch.NCBI do
 
   defp search_params(organism_name, options) do
     retmax = options |> Keyword.get(:num_results, default_num_results)
+    retstart = options |> Keyword.get(:start_at_record_index, default_start_at_record_index)
     properties = options |> Keyword.get(:properties, default_properties)
 
     %{
       term: "#{organism_name}[primary organism] AND #{properties}[prop]",
-      retmax: retmax
+      retmax: retmax,
+      retstart: retstart
     }
     |> Map.merge(shared_params)
   end
@@ -77,6 +80,10 @@ defmodule DNASearch.NCBI do
 
   defp default_num_results do
     20
+  end
+
+  defp default_start_at_record_index do
+    0
   end
 
   defp default_properties do
