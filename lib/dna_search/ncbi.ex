@@ -90,13 +90,11 @@ defmodule DNASearch.NCBI do
     - `options` (optional):
       - `timeout` (optional): request timeout in milliseconds. default: `10_000` (10 seconds).
   """
-  def get_fasta_for_sequence_ids(id_strings, options \\ []) do
-    if Enum.any?(id_strings) do
-      id_strings
-      |> make_fasta_request(options)
-    else
-      ""
-    end
+  def get_fasta_for_sequence_ids(id_strings, options \\ [])
+  def get_fasta_for_sequence_ids([], _), do: ""
+  def get_fasta_for_sequence_ids(id_strings, options) do
+    id_strings
+    |> make_fasta_request(options)
   end
 
   defp make_search_request(organism_name, options) do
