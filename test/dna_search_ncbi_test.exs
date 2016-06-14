@@ -42,7 +42,7 @@ defmodule DNASearchNCBITest do
     %{ids: ids} = DNASearch.NCBI.get_sequence_records("Orchidaceae")
 
     assert(
-      Enum.all?(ids, fn(id) -> id =~ ~r/\d+/ end)
+      Enum.all?(ids, &id_string?/1)
     )
   end
 
@@ -72,9 +72,7 @@ defmodule DNASearchNCBITest do
     results = DNASearch.NCBI.get_sequence_ids("Angraecum eburneum")
 
     assert(
-      results
-      |> Enum.map(fn(result) -> result =~ ~r/\A\d+\Z/ end)
-      |> Enum.all?
+      Enum.all?(results, &id_string?/1)
     )
   end
 
@@ -82,5 +80,9 @@ defmodule DNASearchNCBITest do
     result = DNASearch.NCBI.get_fasta_for_sequence_ids(["1027888907"])
 
     assert(FASTA.valid_string?(result))
+  end
+
+  defp id_string?(str) do
+    str =~ ~r/\A\d+\Z/
   end
 end
