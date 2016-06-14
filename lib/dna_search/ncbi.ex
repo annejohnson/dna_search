@@ -1,18 +1,29 @@
 defmodule DNASearch.NCBI do
+  @moduledoc """
+  Provides functions for querying the NCBI Nucleotide database for DNA sequence records.
+
+  #### Links to API Documentation:
+  - [General API info](https://www.ncbi.nlm.nih.gov/books/NBK25500/)
+  - [Nucleotide fields](http://www.ncbi.nlm.nih.gov/books/NBK49540/)
+  - [Query syntax info](https://www.ncbi.nlm.nih.gov/books/NBK25499/)
+  """
+
   alias DNASearch.FlokiUtils
-  # API info: https://www.ncbi.nlm.nih.gov/books/NBK25500/
-  # Fields info: http://www.ncbi.nlm.nih.gov/books/NBK49540/
-  # Syntax info: https://www.ncbi.nlm.nih.gov/books/NBK25499/
 
   @doc """
+  Returns a raw FASTA string containing DNA data associated with the organism.
 
   ## Parameters
 
-    - `options`:
-        `num_records`: default `20`
-        `start_at_record_index`: default `0` to start at the first record
-        `properties`: default `biomol_genomic` ([see more possible values here](http://www.ncbi.nlm.nih.gov/books/NBK49540/))
-        `timeout`: default `10_000` (10 seconds)
+    - `organism_name`: name of the organism you're interested in.
+      works best as a species names, e.g. `Homo sapiens` over `human`.
+    - `options` (optional):
+      - `num_records` (optional): number of records to include in the FASTA. default: `20`.
+      - `start_at_record_index` (optional): the index of the first record to return.
+         default: `0` to return the first set of records.
+      - `properties` (optional): string specifying special properties to filter by.
+        default: `biomol_genomic` to filter to genomic sequences. [see possible values for this field here](http://www.ncbi.nlm.nih.gov/books/NBK49540/).
+      - `timeout` (optional): request timeout in milliseconds. default: `10_000` (10 seconds).
   """
   def get_fasta(organism_name, options \\ []) do
     organism_name
@@ -20,6 +31,25 @@ defmodule DNASearch.NCBI do
     |> get_fasta_for_sequence_ids
   end
 
+  @doc """
+  Queries NCBI for sequence records and returns a map containing the following keys:
+    - `ids`: NCBI record IDs corresponding to sequences
+    - `start_at_record_index`: the index of the first ID in the current result set
+    - `num_records`: the number of record IDs in the current result set
+    - `total_num_records`: the total number of matching record IDs
+
+  ## Parameters
+
+    - `organism_name`: name of the organism you're interested in.
+      works best as a species names, e.g. `Homo sapiens` over `human`.
+    - `options` (optional):
+      - `num_records` (optional): number of records to include in the result set. default: `20`.
+      - `start_at_record_index` (optional): the index of the first record to return.
+         default: `0` to return the first set of records.
+      - `properties` (optional): string specifying special properties to filter by.
+        default: `biomol_genomic` to filter to genomic sequences. [see possible values for this field here](http://www.ncbi.nlm.nih.gov/books/NBK49540/).
+      - `timeout` (optional): request timeout in milliseconds. default: `10_000` (10 seconds).
+  """
   def get_sequence_records(organism_name, options \\ []) do
     response_string = organism_name |> make_search_request(options)
     ids = extract_id_strings(response_string)
@@ -32,10 +62,34 @@ defmodule DNASearch.NCBI do
     }
   end
 
+  @doc """
+  Returns a list of NCBI IDs (strings) for sequences associated with the organism.
+
+  ## Parameters
+
+    - `organism_name`: name of the organism you're interested in.
+      works best as a species names, e.g. `Homo sapiens` over `human`.
+    - `options` (optional):
+      - `num_records` (optional): number of records to include in the results. default: `20`.
+      - `start_at_record_index` (optional): the index of the first record to return.
+         default: `0` to return the first set of records.
+      - `properties` (optional): string specifying special properties to filter by.
+        default: `biomol_genomic` to filter to genomic sequences. [see possible values for this field here](http://www.ncbi.nlm.nih.gov/books/NBK49540/).
+      - `timeout` (optional): request timeout in milliseconds. default: `10_000` (10 seconds).
+  """
   def get_sequence_ids(organism_name, options \\ []) do
     get_sequence_records(organism_name, options).ids
   end
 
+  @doc """
+  Returns a raw FASTA string containing the sequences for the specified record IDs.
+
+  ## Parameters
+
+    - `id_strings`: list of NCBI ID strings corresponding to sequence records
+    - `options` (optional):
+      - `timeout` (optional): request timeout in milliseconds. default: `10_000` (10 seconds).
+  """
   def get_fasta_for_sequence_ids(id_strings, options \\ []) do
     if Enum.any?(id_strings) do
       id_strings
