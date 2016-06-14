@@ -1,4 +1,5 @@
 defmodule DNASearch.NCBI do
+  alias DNASearch.FlokiUtils
   # API info: https://www.ncbi.nlm.nih.gov/books/NBK25500/
   # Fields info: http://www.ncbi.nlm.nih.gov/books/NBK49540/
   # Syntax info: https://www.ncbi.nlm.nih.gov/books/NBK25499/
@@ -57,18 +58,14 @@ defmodule DNASearch.NCBI do
   defp extract_start_at_record_index(response_string) do
     response_string
     |> Floki.find("retstart")
-    |> Floki.FlatText.get
-    |> Integer.parse
-    |> elem(0)
+    |> FlokiUtils.get_integer
   end
 
   defp extract_total_num_records(response_string) do
     response_string
     |> Floki.filter_out("translationstack")
     |> Floki.find("count")
-    |> Floki.FlatText.get
-    |> Integer.parse
-    |> elem(0)
+    |> FlokiUtils.get_integer
   end
 
   defp make_fasta_request(sequence_ids, options) do
