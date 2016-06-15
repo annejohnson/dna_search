@@ -24,7 +24,7 @@ defmodule DNASearch do
   def get_sequences(organism_name, options \\ []) do
     organism_name
     |> get_fasta_data(options)
-    |> Enum.map(fn(datum) -> datum.sequence end)
+    |> Enum.map(&(&1.sequence))
   end
 
   @doc """

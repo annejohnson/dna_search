@@ -19,14 +19,14 @@ defmodule DNASearchTest do
 
     assert(
       results
-      |> Enum.map(fn(result) -> result.sequence end)
+      |> Enum.map(&(&1.sequence))
       |> Enum.map(&valid_sequence?/1)
       |> Enum.all?
     )
 
     assert(
       results
-      |> Enum.map(fn(result) -> result.header end)
+      |> Enum.map(&(&1.header))
       |> Enum.map(&is_binary/1)
       |> Enum.all?
     )
