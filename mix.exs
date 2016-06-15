@@ -8,11 +8,16 @@ defmodule DNASearch.Mixfile do
      description: description,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     deps: deps]
+     deps: deps,
+     package: package]
   end
 
   def application do
     [applications: [:logger, :httpotion]]
+  end
+
+  defp description do
+    "DNASearch is a tool for looking up DNA sequences by species in Elixir."
   end
 
   defp deps do
@@ -23,7 +28,9 @@ defmodule DNASearch.Mixfile do
      {:ex_doc, "~> 0.11", only: :dev}]
   end
 
-  defp description do
-    "DNASearch is a tool for looking up DNA sequences by species in Elixir."
+  defp package do
+    [licenses: ["MIT"],
+     maintainers: ["annecodes@gmail.com"],
+     links: %{"GitHub" => "https://github.com/annejohnson/dna_search"}]
   end
 end
