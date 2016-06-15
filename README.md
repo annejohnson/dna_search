@@ -21,9 +21,8 @@ iex> DNASearch.get_sequences("Pionus maximiliani", limit: 1)
 
 [View full documentation here](https://hexdocs.pm/dna_search/api-reference.html).
 
-## TODO
+## Todo's
 
-- Write tests for enforcement of max_limit
 - Don't make real API calls during tests
 
 ## Contributing

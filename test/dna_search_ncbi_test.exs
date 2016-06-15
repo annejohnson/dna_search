@@ -16,6 +16,13 @@ defmodule DNASearchNCBITest do
     assert(length(FASTA.parse_string(large_result)) == 40)
   end
 
+  test "get_fasta enforces a maximum number of records that the user can request" do
+    maximum = 50
+    result = DNASearch.NCBI.get_fasta("Orchidaceae", limit: 60)
+
+    assert(length(FASTA.parse_string(result)) == maximum)
+  end
+
   test "get_fasta accepts a :start_at_record_index option to enable paging" do
     page1 = DNASearch.NCBI.get_fasta("Orchidaceae", limit: 1, start_at_record_index: 0)
     page2 = DNASearch.NCBI.get_fasta("Orchidaceae", limit: 1, start_at_record_index: 1)
