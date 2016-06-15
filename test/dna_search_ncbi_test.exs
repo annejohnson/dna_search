@@ -8,17 +8,17 @@ defmodule DNASearchNCBITest do
     assert(FASTA.valid_string?(result))
   end
 
-  test "get_fasta accepts a :num_records option to control the number of records returned" do
-    small_result = DNASearch.NCBI.get_fasta("Orchidaceae", num_records: 2)
+  test "get_fasta accepts a :limit option to control the number of records returned" do
+    small_result = DNASearch.NCBI.get_fasta("Orchidaceae", limit: 2)
     assert(length(FASTA.parse_string(small_result)) == 2)
 
-    large_result = DNASearch.NCBI.get_fasta("Orchidaceae", num_records: 40)
+    large_result = DNASearch.NCBI.get_fasta("Orchidaceae", limit: 40)
     assert(length(FASTA.parse_string(large_result)) == 40)
   end
 
   test "get_fasta accepts a :start_at_record_index option to enable paging" do
-    page1 = DNASearch.NCBI.get_fasta("Orchidaceae", num_records: 1, start_at_record_index: 0)
-    page2 = DNASearch.NCBI.get_fasta("Orchidaceae", num_records: 1, start_at_record_index: 1)
+    page1 = DNASearch.NCBI.get_fasta("Orchidaceae", limit: 1, start_at_record_index: 0)
+    page2 = DNASearch.NCBI.get_fasta("Orchidaceae", limit: 1, start_at_record_index: 1)
 
     refute(page1 == page2)
   end
@@ -26,12 +26,12 @@ defmodule DNASearchNCBITest do
   test "get_fasta accepts a :properties option" do
     genomic_dna_result = DNASearch.NCBI.get_fasta(
       "Homo sapiens",
-      num_records: 1,
+      limit: 1,
       properties: "biomol_genomic"
     )
     mitochondrial_dna_result = DNASearch.NCBI.get_fasta(
       "Homo sapiens",
-      num_records: 1,
+      limit: 1,
       properties: "gene_in_mitochondrion"
     )
 
@@ -47,7 +47,7 @@ defmodule DNASearchNCBITest do
   end
 
   test "get_sequence_records returns data including the number of returned records" do
-    %{num_records: num_records} = DNASearch.NCBI.get_sequence_records("Orchidaceae", num_records: 5)
+    %{num_records: num_records} = DNASearch.NCBI.get_sequence_records("Orchidaceae", limit: 5)
 
     assert(num_records == 5)
   end

@@ -13,7 +13,7 @@ defmodule DNASearch do
     - `organism_name`: name of the organism you're interested in.
       works best as a species names, e.g. `Homo sapiens` over `human`.
     - `options` (optional):
-      - `limit` (optional): maximum number of sequences to get. default: `20`.
+      - `limit` (optional): number of sequences to get. default: `20`, max: `50`.
 
   ## Examples
 
@@ -35,7 +35,7 @@ defmodule DNASearch do
     - `organism_name`: name of the organism you're interested in.
       works best as a species names, e.g. `Homo sapiens` over `human`.
     - `options` (optional):
-      - `limit` (optional): maximum number of FASTA data to get. default: `20`.
+      - `limit` (optional): number of FASTA data to get. default: `20`, max: `50`.
 
   ## Examples
 
@@ -54,10 +54,15 @@ defmodule DNASearch do
 
   defp get_request_options(options) do
     limit = options |> Keyword.get(:limit, default_limit)
-    [num_records: limit]
+    limit = Enum.min([limit, max_limit])
+    [limit: limit]
   end
 
   defp default_limit do
-    20
+    10
+  end
+
+  defp max_limit do
+    50
   end
 end

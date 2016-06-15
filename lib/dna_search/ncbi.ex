@@ -18,7 +18,7 @@ defmodule DNASearch.NCBI do
     - `organism_name`: name of the organism you're interested in.
       works best as a species names, e.g. `Homo sapiens` over `human`.
     - `options` (optional):
-      - `num_records` (optional): number of records to include in the FASTA. default: `20`.
+      - `limit` (optional): number of records to include in the FASTA. default: `20`.
       - `start_at_record_index` (optional): the index of the first record to return.
          default: `0` to return the first set of records.
       - `properties` (optional): string specifying special properties to filter by.
@@ -43,7 +43,7 @@ defmodule DNASearch.NCBI do
     - `organism_name`: name of the organism you're interested in.
       works best as a species names, e.g. `Homo sapiens` over `human`.
     - `options` (optional):
-      - `num_records` (optional): number of records to include in the result set. default: `20`.
+      - `limit` (optional): number of records to include in the result set. default: `20`.
       - `start_at_record_index` (optional): the index of the first record to return.
          default: `0` to return the first set of records.
       - `properties` (optional): string specifying special properties to filter by.
@@ -70,7 +70,7 @@ defmodule DNASearch.NCBI do
     - `organism_name`: name of the organism you're interested in.
       works best as a species names, e.g. `Homo sapiens` over `human`.
     - `options` (optional):
-      - `num_records` (optional): number of records to include in the results. default: `20`.
+      - `limit` (optional): number of records to include in the results. default: `20`.
       - `start_at_record_index` (optional): the index of the first record to return.
          default: `0` to return the first set of records.
       - `properties` (optional): string specifying special properties to filter by.
@@ -125,7 +125,7 @@ defmodule DNASearch.NCBI do
   end
 
   defp search_params(organism_name, options) do
-    retmax = options |> Keyword.get(:num_records, default_num_records)
+    retmax = options |> Keyword.get(:limit, default_limit)
     retstart = options |> Keyword.get(:start_at_record_index, default_start_at_record_index)
     properties = options |> Keyword.get(:properties, default_properties)
 
@@ -159,7 +159,7 @@ defmodule DNASearch.NCBI do
     end
   end
 
-  defp default_num_records do
+  defp default_limit do
     20
   end
 
