@@ -1,6 +1,6 @@
 defmodule DNASearch.NCBI do
   @moduledoc """
-  Provides functions for querying the NCBI Nucleotide database for DNA sequence records.
+  Provides functions for querying the NCBI Nucleotide database.
 
   #### Links to NCBI API Documentation:
   - [General API info](https://www.ncbi.nlm.nih.gov/books/NBK25500/)
@@ -16,9 +16,9 @@ defmodule DNASearch.NCBI do
   ## Parameters
 
     - `organism_name`: name of the organism you're interested in.
-      works best as a species names, e.g. `Homo sapiens` over `human`.
+      works best as a species names, e.g. `"Homo sapiens"` over `"human"`.
     - `options` (optional):
-      - `limit` (optional): number of records to include in the FASTA. default: `20`.
+      - `limit` (optional): number of records to include in the FASTA. default: `10`, max: `50`.
       - `start_at_record_index` (optional): the index of the first record to return.
          default: `0` to return the first set of records.
       - `properties` (optional): string specifying special properties to filter by.
@@ -34,16 +34,16 @@ defmodule DNASearch.NCBI do
   @doc """
   Queries NCBI for sequence records and returns a map containing the following keys:
     - `ids`: NCBI record IDs corresponding to sequences
-    - `start_at_record_index`: the index of the first ID in the current result set
+    - `start_at_record_index`: the index of the first returned record ID
     - `num_records`: the number of record IDs in the current result set
     - `total_num_records`: the total number of matching record IDs
 
   ## Parameters
 
     - `organism_name`: name of the organism you're interested in.
-      works best as a species names, e.g. `Homo sapiens` over `human`.
+      works best as a species names, e.g. `"Homo sapiens"` over `"human"`.
     - `options` (optional):
-      - `limit` (optional): number of records to include in the result set. default: `20`.
+      - `limit` (optional): number of records to include in the result set. default: `10`, max: `50`.
       - `start_at_record_index` (optional): the index of the first record to return.
          default: `0` to return the first set of records.
       - `properties` (optional): string specifying special properties to filter by.
@@ -68,9 +68,9 @@ defmodule DNASearch.NCBI do
   ## Parameters
 
     - `organism_name`: name of the organism you're interested in.
-      works best as a species names, e.g. `Homo sapiens` over `human`.
+      works best as a species names, e.g. `"Homo sapiens"` over `"human"`.
     - `options` (optional):
-      - `limit` (optional): number of records to include in the results. default: `20`.
+      - `limit` (optional): number of records to include in the results. default: `10`, max: `50`.
       - `start_at_record_index` (optional): the index of the first record to return.
          default: `0` to return the first set of records.
       - `properties` (optional): string specifying special properties to filter by.
@@ -126,6 +126,7 @@ defmodule DNASearch.NCBI do
 
   defp search_params(organism_name, options) do
     retmax = options |> Keyword.get(:limit, default_limit)
+    retmax = Enum.min([retmax, max_limit])
     retstart = options |> Keyword.get(:start_at_record_index, default_start_at_record_index)
     properties = options |> Keyword.get(:properties, default_properties)
 
@@ -160,7 +161,11 @@ defmodule DNASearch.NCBI do
   end
 
   defp default_limit do
-    20
+    10
+  end
+
+  defp max_limit do
+    50
   end
 
   defp default_start_at_record_index do

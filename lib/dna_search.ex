@@ -11,9 +11,9 @@ defmodule DNASearch do
   ## Parameters
 
     - `organism_name`: name of the organism you're interested in.
-      works best as a species names, e.g. `Homo sapiens` over `human`.
+      works best as a species names, e.g. `"Homo sapiens"` over `"human"`.
     - `options` (optional):
-      - `limit` (optional): number of sequences to get. default: `20`, max: `50`.
+      - See `DNASearch.NCBI.get_fasta/2` for permitted options.
 
   ## Examples
 
@@ -33,9 +33,9 @@ defmodule DNASearch do
   ## Parameters
 
     - `organism_name`: name of the organism you're interested in.
-      works best as a species names, e.g. `Homo sapiens` over `human`.
+      works best as a species names, e.g. `"Homo sapiens"` over `"human"`.
     - `options` (optional):
-      - `limit` (optional): number of FASTA data to get. default: `20`, max: `50`.
+      - See `DNASearch.NCBI.get_fasta/2` for permitted options.
 
   ## Examples
 
@@ -48,21 +48,7 @@ defmodule DNASearch do
   """
   def get_fasta_data(organism_name, options \\ []) do
     organism_name
-    |> API.get_fasta(get_request_options(options))
+    |> API.get_fasta(options)
     |> FASTA.parse_string
-  end
-
-  defp get_request_options(options) do
-    limit = options |> Keyword.get(:limit, default_limit)
-    limit = Enum.min([limit, max_limit])
-    [limit: limit]
-  end
-
-  defp default_limit do
-    10
-  end
-
-  defp max_limit do
-    50
   end
 end

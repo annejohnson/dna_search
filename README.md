@@ -16,4 +16,4 @@ end
 
 ## TODO
 
-Enable getting all sequences in NCBI functions (rather than timing out at a large request).
+- Test enforcement of max limit
