@@ -2,10 +2,10 @@ defmodule DNASearch.NCBI do
   @moduledoc """
   Provides functions for querying the NCBI Nucleotide database for DNA sequence records.
 
-  #### Links to API Documentation:
+  #### Links to NCBI API Documentation:
   - [General API info](https://www.ncbi.nlm.nih.gov/books/NBK25500/)
-  - [Nucleotide fields](http://www.ncbi.nlm.nih.gov/books/NBK49540/)
   - [Query syntax info](https://www.ncbi.nlm.nih.gov/books/NBK25499/)
+  - [Nucleotide database fields](http://www.ncbi.nlm.nih.gov/books/NBK49540/)
   """
 
   alias DNASearch.FlokiUtils

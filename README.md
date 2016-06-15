@@ -13,3 +13,7 @@ def deps do
   [{:dna_search, "~> 0.0.1"}]
 end
 ```
+
+## TODO
+
+Enable getting all sequences in NCBI functions (rather than timing out at a large request).

@@ -12,16 +12,18 @@ defmodule DNASearch do
 
     - `organism_name`: name of the organism you're interested in.
       works best as a species names, e.g. `Homo sapiens` over `human`.
+    - `options` (optional):
+      - `limit` (optional): maximum number of sequences to get. default: `20`.
 
   ## Examples
 
-      iex> sequences = DNASearch.get_sequences("Pionus maximiliani")
-      ...> List.first(sequences)
+      iex> [sequence] = DNASearch.get_sequences("Pionus maximiliani", limit: 1)
+      ...> sequence
       "CGCGAAACAGGTGTCTCTTGGTTCCGACTGACCTGTGCTTTTATGAGCTTGTTGGTTTAGTTAGTTTGTTGGGGGTTGTTGGGTTTTGGGTTTGGGTTTTTTTCCTCCTTTTCTAGACACATATTTTTGACAGGCTGTATAAAACTTTACTTATCTTTGTTAATAATGTAGCTTTGAACTACTTATTCTGACATTCCAGATCAGCTTTAATGGAAGTGAAGGGAGGCGAAGTAGGAGTAGAAGATACTCTGGATCTGATAGTGACTCTATCTCGGAAAGGAAACGGCCAAAAAAGCGTGGAAGACCACGAACTATTCCTCGAGAAAATATT"
   """
-  def get_sequences(organism_name) do
+  def get_sequences(organism_name, options \\ []) do
     organism_name
-    |> get_fasta_data
+    |> get_fasta_data(options)
     |> Enum.map(fn(datum) -> datum.sequence end)
   end
 
@@ -32,6 +34,8 @@ defmodule DNASearch do
 
     - `organism_name`: name of the organism you're interested in.
       works best as a species names, e.g. `Homo sapiens` over `human`.
+    - `options` (optional):
+      - `limit` (optional): maximum number of FASTA data to get. default: `20`.
 
   ## Examples
 
@@ -42,9 +46,18 @@ defmodule DNASearch do
         sequence: "CGCGAAACAGGTGTCTCTTGGTTCCGACTGACCTGTGCTTTTATGAGCTTGTTGGTTTAGTTAGTTTGTTGGGGGTTGTTGGGTTTTGGGTTTGGGTTTTTTTCCTCCTTTTCTAGACACATATTTTTGACAGGCTGTATAAAACTTTACTTATCTTTGTTAATAATGTAGCTTTGAACTACTTATTCTGACATTCCAGATCAGCTTTAATGGAAGTGAAGGGAGGCGAAGTAGGAGTAGAAGATACTCTGGATCTGATAGTGACTCTATCTCGGAAAGGAAACGGCCAAAAAAGCGTGGAAGACCACGAACTATTCCTCGAGAAAATATT"
       }
   """
-  def get_fasta_data(organism_name) do
+  def get_fasta_data(organism_name, options \\ []) do
     organism_name
-    |> API.get_fasta
+    |> API.get_fasta(get_request_options(options))
     |> FASTA.parse_string
+  end
+
+  defp get_request_options(options) do
+    limit = options |> Keyword.get(:limit, default_limit)
+    [num_records: limit]
+  end
+
+  defp default_limit do
+    20
   end
 end
