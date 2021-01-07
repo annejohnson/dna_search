@@ -1,6 +1,6 @@
 # DNASearch [![Hex.pm](https://img.shields.io/hexpm/v/dna_search.svg?style=flat-square)](https://hex.pm/packages/dna_search)
 
-This is a tool for looking up DNA sequences by species in Elixir.
+Hello! This is a tool for looking up DNA sequences by species in Elixir.
 
 ## Installation
 
